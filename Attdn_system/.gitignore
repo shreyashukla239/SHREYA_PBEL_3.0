@@ -1,0 +1,30 @@
+# Dependencies & Environment
+node_modules/
+backend/.venv/
+backend/venv/
+.env
+.env.local
+
+# Next.js build output
+frontend/.next/
+frontend/out/
+frontend/next-env.d.ts
+frontend/tsconfig.tsbuildinfo
+
+# IDE settings
+.vscode/
+.idea/
+
+# Testing & Specifications
+frontend/__tests__/
+frontend/.kiro/
+
+# Python Byte-code & cache
+__pycache__/
+backend/__pycache__/
+*.py[cod]
+
+# DeepFace caches & runtime logs
+backend/registered_students/*.pkl
+backend/logs/*.csv
+*.log
