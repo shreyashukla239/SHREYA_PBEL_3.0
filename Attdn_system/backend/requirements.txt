@@ -1,20 +1,7 @@
-# FastAPI web framework for API services
 fastapi
-
-# Uvicorn ASGI server to run the FastAPI application
 uvicorn
-
-# Pydantic data validation and settings management
 pydantic
-
-# Pandas data analysis library, used for DeepFace search results dataframe parsing
 pandas
-
-# DeepFace biometric facial recognition framework
 deepface
-
-# Legacy Keras interface supporting TensorFlow weights loading in DeepFace
 tf-keras
-
-# Pillow image processing library, used for creation of dummy warmup images
 pillow

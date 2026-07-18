@@ -1,42 +1,14 @@
 # Smart Attendance Portal
 
-A contactless, facial recognition biometric attendance portal powered by **Next.js** and **FastAPI** (using DeepFace).
+This is a contactless attendance monitoring system. It uses modern facial recognition technology to identify students and record check-ins automatically.
 
----
+## Key Features
 
-## 🚀 Quick Start
-
-### 1. Start the Backend Server (Port 5000)
-Run this command in your terminal from the project root:
-- **PowerShell**: `cd backend; .venv\Scripts\Activate.ps1; uvicorn main:app --reload --port 5000`
-- **Command Prompt**: `cd backend && .venv\Scripts\activate.bat && uvicorn main:app --reload --port 5000`
-
-### 2. Start the Frontend Web Portal (Port 3000)
-Run these commands in a new terminal from the project root:
-```bash
-cd frontend
-npm install
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
-## 👤 Registering Students
-
-To add a person to the check-in database:
-1. Copy their photo into: `backend/registered_students/`
-2. Save the filename in **lowercase** with spaces replaced by **underscores (`_`)**.
-   - *Example*: **Shivam Pandey** ➡️ `shivam_pandey.jpg`
-   - *Example*: **Alice Johnson** ➡️ `alice_johnson.png`
-
-The system automatically parses `shivam_pandey.jpg` to display `"Shivam Pandey"` on success.
-
----
-
-## 🧪 Running Tests
-To execute the automated vitest suite:
-```bash
-cd frontend
-npm run test
-```
+- **Facial Check-In**: Quick biometric verification using a camera.
+- **Oval Viewfinder Guide**: Automatically detects human faces and captures cropped oval portrait templates.
+- **Student Profiles**: Directory manager to view, register, or deregister student data.
+- **Class Check-In**: Track logs sorted by course subjects (e.g. Mathematics, Computer Science).
+- **Streak Tracker**: Calculates consecutive check-in streaks and unlocks special gamified badges.
+- **Absentee Panel**: Monitored view that flags absent or late students based on configurable cutoff timings.
+- **System Telemetry**: Performance console verifying server status and recognition latency.
+- **Spreadsheet Exports**: Downloadable CSV spreadsheets containing comprehensive records.

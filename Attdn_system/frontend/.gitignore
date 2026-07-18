@@ -1,44 +1,23 @@
-# Dependencies
 node_modules/
-
-# Next.js build output
 .next/
 out/
-
-# TypeScript build cache
 tsconfig.tsbuildinfo
-
-# Next.js auto-generated types (regenerated on dev/build)
 next-env.d.ts
-
-# Environment variables
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-
-# OS files
 .DS_Store
 Thumbs.db
-
-# Editor directories
 .vscode/
 .idea/
-
-# Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# Vitest cache
 node_modules/.vite/
-
-# Production build artifacts
 /build
 /dist
-
-# Specifications and local test suites
 .kiro/
 __tests__/

@@ -1,12 +1,7 @@
-# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
-
-# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -26,14 +21,10 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-
-# Virtual environments
 .venv/
 venv/
 ENV/
 env/
-
-# IDE files
 .vscode/
 .idea/
 *.suo
@@ -41,13 +32,9 @@ env/
 *.njsproj
 *.sln
 *.sw?
-
-# Operating System files
 Thumbs.db
 ehthumbs.db
 Desktop.ini
-
-# Project Specific Ignored Files
 registered_students/*.pkl
 logs/*.csv
 .env
