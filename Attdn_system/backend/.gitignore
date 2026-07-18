@@ -36,6 +36,5 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 registered_students/*.pkl
-logs/*.csv
 .env
 .env.local

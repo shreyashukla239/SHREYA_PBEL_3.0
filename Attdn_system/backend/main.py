@@ -9,7 +9,7 @@ if sys.platform.startswith("win"):
 import csv
 import time
 from datetime import datetime, timedelta
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 last_inference_latency = 0.0
 inference_latencies = []
 from fastapi.middleware.cors import CORSMiddleware
@@ -110,7 +110,8 @@ async def startup_event():
             img_path=dummy_path,
             db_path="registered_students",
             model_name="VGG-Face",
-            enforce_detection=False
+            enforce_detection=False,
+            detector_backend="skip"
         )
     except Exception as e:
         print(f"Warmup status: VGG-Face warmup failed/skipped: {e}")
@@ -141,7 +142,8 @@ async def verify_attendance(request: AttendanceRequest):
                 img_path=raw_base64,
                 db_path="registered_students",
                 model_name="VGG-Face",
-                enforce_detection=True
+                enforce_detection=False,
+                detector_backend="skip"
             )
             duration_ms = (time.time() - start_time_inf) * 1000
             global last_inference_latency
@@ -228,34 +230,29 @@ async def register_student(request: RegisterRequest):
                 content={"status": "error", "message": "Invalid base64 image encoding."}
             )
         file_name_id = name.replace(" ", "_").lower()
-        temp_path = os.path.join("registered_students", f"temp_reg_{file_name_id}.jpg")
+        permanent_path = os.path.join("registered_students", f"{file_name_id}.jpg")
         try:
-            with open(temp_path, "wb") as f:
-                f.write(image_bytes)
-            from deepface import DeepFace
-            faces = DeepFace.extract_faces(img_path=temp_path, enforce_detection=True)
-            if not faces or len(faces) == 0:
-                raise ValueError("No faces detected")
+            pil_image = Image.open(io.BytesIO(image_bytes))
+            if pil_image.mode == "RGBA":
+                pil_image = pil_image.convert("RGB")
+            width, height = pil_image.size
+            if width < 50 or height < 50:
+                raise ValueError("Image too small")
+            pil_image.save(permanent_path, "JPEG", quality=95)
         except Exception as e:
-            if os.path.exists(temp_path):
+            print(f"[REGISTER] Image save failed: {type(e).__name__}: {e}")
+            if os.path.exists(permanent_path):
                 try:
-                    os.remove(temp_path)
+                    os.remove(permanent_path)
                 except Exception:
                     pass
             return JSONResponse(
                 status_code=400,
                 content={
                     "status": "error",
-                    "message": "No face was detected in the photo. Please stand in a well-lit area and try again."
+                    "message": "Invalid image. Please try capturing again."
                 }
             )
-        permanent_path = os.path.join("registered_students", f"{file_name_id}.jpg")
-        if os.path.exists(permanent_path):
-            try:
-                os.remove(permanent_path)
-            except Exception:
-                pass
-        os.rename(temp_path, permanent_path)
         clear_pickle_caches()
         return {
             "status": "success",
@@ -571,3 +568,83 @@ async def get_attendance_streaks():
                 "detail": str(e)
             }
         )
+@app.websocket("/api/v1/ws/feedback")
+async def websocket_feedback(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            data = await websocket.receive_json()
+            image_data = data.get("image_data")
+            subject = data.get("subject", "General")
+            if not image_data:
+                await websocket.send_json({"status": "error", "message": "No image data sent"})
+                continue
+            if image_data.startswith("data:image/"):
+                parts = image_data.split(",", 1)
+                if len(parts) > 1:
+                    raw_base64 = parts[1]
+                else:
+                    raw_base64 = image_data
+            else:
+                raw_base64 = image_data
+            clear_pickle_caches()
+            from deepface import DeepFace
+            try:
+                start_time_inf = time.time()
+                results = DeepFace.find(
+                    img_path=raw_base64,
+                    db_path="registered_students",
+                    model_name="VGG-Face",
+                    enforce_detection=False,
+                    detector_backend="skip"
+                )
+                duration_ms = (time.time() - start_time_inf) * 1000
+                global last_inference_latency
+                last_inference_latency = round(duration_ms, 2)
+                inference_latencies.append(duration_ms)
+                if len(inference_latencies) > 10:
+                    inference_latencies.pop(0)
+            except ValueError as ve:
+                err_msg = str(ve)
+                if "Face could not be detected" in err_msg or "face" in err_msg.lower():
+                    await websocket.send_json({"status": "no_face", "message": "No face detected"})
+                else:
+                    await websocket.send_json({"status": "error", "message": err_msg})
+                continue
+            except Exception as e:
+                await websocket.send_json({"status": "error", "message": str(e)})
+                continue
+            match_found = False
+            primary_record = None
+            if isinstance(results, list) and len(results) > 0:
+                df = results[0]
+                if isinstance(df, pd.DataFrame) and not df.empty:
+                    primary_record = df.iloc[0]
+                    match_found = True
+            elif isinstance(results, pd.DataFrame) and not results.empty:
+                primary_record = results.iloc[0]
+                match_found = True
+            if match_found and primary_record is not None:
+                file_path = primary_record["identity"]
+                filename = os.path.basename(file_path)
+                file_name_id, _ = os.path.splitext(filename)
+                display_name = file_name_id.replace("_", " ").title()
+                now = datetime.now()
+                time_str = now.strftime("%H:%M")
+                log_attendance(file_name_id, subject)
+                await websocket.send_json({
+                    "status": "success",
+                    "match_found": True,
+                    "student_name": display_name,
+                    "check_in_time": time_str
+                })
+            else:
+                await websocket.send_json({
+                    "status": "not_recognized",
+                    "match_found": False,
+                    "message": "Face not recognized"
+                })
+    except WebSocketDisconnect:
+        pass
+    except Exception:
+        pass

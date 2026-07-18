@@ -15,5 +15,4 @@ __pycache__/
 backend/__pycache__/
 *.py[cod]
 backend/registered_students/*.pkl
-backend/logs/*.csv
 *.log

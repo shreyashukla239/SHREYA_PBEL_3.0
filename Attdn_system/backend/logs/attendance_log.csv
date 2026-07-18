@@ -1,0 +1,37 @@
+Timestamp,Student_ID,Subject,Status
+2026-07-13T08:12:10.000000,arjun_mehta,History 🏺,Present
+2026-07-13T08:18:15.000000,priya_sharma,History 🏺,Present
+2026-07-13T08:24:45.000000,rohan_gupta,History 🏺,Present
+2026-07-13T08:28:10.000000,sneha_patel,History 🏺,Present
+2026-07-13T08:29:30.000000,vikram_singh,History 🏺,Present
+2026-07-16T08:14:10.000000,arjun_mehta,Science 🔬,Present
+2026-07-16T08:20:12.000000,priya_sharma,Science 🔬,Present
+2026-07-16T08:25:30.000000,rohan_gupta,Science 🔬,Present
+2026-07-16T08:27:50.000000,sneha_patel,Science 🔬,Present
+2026-07-16T08:29:10.000000,vikram_singh,Science 🔬,Present
+2026-07-17T08:12:20.000000,arjun_mehta,Computer Science 💻,Present
+2026-07-17T08:19:15.000000,priya_sharma,Computer Science 💻,Present
+2026-07-17T08:24:45.000000,rohan_gupta,Computer Science 💻,Present
+2026-07-17T08:28:10.000000,sneha_patel,Computer Science 💻,Present
+2026-07-17T08:29:30.000000,vikram_singh,Computer Science 💻,Present
+2026-07-18T08:15:30.000000,arjun_mehta,Mathematics 📐,Present
+2026-07-18T08:22:10.000000,priya_sharma,Mathematics 📐,Present
+2026-07-18T09:12:45.000000,rohan_gupta,Mathematics 📐,Present
+2026-07-18T08:28:15.000000,sneha_patel,Mathematics 📐,Present
+2026-07-18T08:29:40.000000,vikram_singh,Mathematics 📐,Present2026-07-18T15:04:49.256989,rohan_gupta,Mathematics 📐,Present
+2026-07-18T15:04:58.098046,priya_sharma,Mathematics 📐,Present
+2026-07-18T15:04:59.045121,priya_sharma,Mathematics 📐,Present
+2026-07-18T15:05:23.951613,priya_sharma,Mathematics 📐,Present
+2026-07-18T15:05:29.128178,priya_sharma,Mathematics 📐,Present
+2026-07-18T15:06:30.189753,shivam,Mathematics 📐,Present
+2026-07-18T15:06:35.718238,shivam,Mathematics 📐,Present
+2026-07-18T15:06:42.624395,shivam,Mathematics 📐,Present
+2026-07-18T15:06:48.350957,shivam,Mathematics 📐,Present
+2026-07-18T15:11:34.259712,shivam,Mathematics 📐,Present
+2026-07-18T15:13:28.770248,shivam,English 📚,Present
+2026-07-18T15:13:51.052460,shivam,Mathematics 📐,Present
+2026-07-18T15:14:07.753287,shivam,Mathematics 📐,Present
+2026-07-18T15:14:08.835669,shivam,Mathematics 📐,Present
+2026-07-18T15:14:45.040274,shivam,Mathematics 📐,Present
+2026-07-18T15:14:55.887848,shivam,Mathematics 📐,Present
+2026-07-18T15:15:03.276671,shivam,Mathematics 📐,Present

@@ -50,10 +50,16 @@ export function detectFaceFrame(video: HTMLVideoElement): boolean {
   }
   try {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const regionW = 32;
+    const regionH = 42;
+    const x0 = Math.floor(centerX - regionW / 2);
+    const y0 = Math.floor(centerY - regionH / 2);
+    const imgData = ctx.getImageData(x0, y0, regionW, regionH);
     const data = imgData.data;
     let skinPixels = 0;
-    const totalPixels = canvas.width * canvas.height;
+    const totalPixels = regionW * regionH;
     for (let i = 0; i < totalPixels; i++) {
       const idx = i * 4;
       const r = data[idx];
@@ -64,7 +70,7 @@ export function detectFaceFrame(video: HTMLVideoElement): boolean {
       }
     }
     const skinRatio = skinPixels / totalPixels;
-    return skinRatio > 0.06;
+    return skinRatio > 0.20;
   } catch (e) {
     return false;
   }

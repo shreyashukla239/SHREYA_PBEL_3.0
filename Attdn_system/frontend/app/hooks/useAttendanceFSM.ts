@@ -25,6 +25,7 @@
 import { useState, useCallback } from 'react';
 
 import { verifyAttendance } from '../lib/apiClient';
+import { playSuccessChime, playErrorChime } from '../lib/audio';
 import {
   AppState,
   StudentResult,
@@ -121,13 +122,14 @@ export function useAttendanceFSM(): FSMState & FSMActions {
         setStudentResult(result);
         setErrorMessage(null);
         setAppState('SUCCESS');
+        playSuccessChime();
       } else {
-        // No match — ERROR transition (Req 1.4, 5.6)
         setStudentResult(null);
         setErrorMessage(
           'Face not recognized. Please contact administration for registration.',
         );
         setAppState('ERROR');
+        playErrorChime();
       }
     } catch (err: unknown) {
       // Map typed ApiError codes to user-facing messages (Req 5.9, 5.10)
@@ -147,6 +149,7 @@ export function useAttendanceFSM(): FSMState & FSMActions {
       setStudentResult(null);
       setErrorMessage(message);
       setAppState('ERROR');
+      playErrorChime();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appState]);
@@ -192,24 +195,38 @@ export function useAttendanceFSM(): FSMState & FSMActions {
   // handleCameraError — any → ERROR (Req 3.9)
   // -------------------------------------------------------------------------
   const handleCameraError = useCallback((message: string) => {
-    // No state guard: camera errors can occur from any state
     setStudentResult(null);
     setErrorMessage(message);
     setAppState('ERROR');
+    playErrorChime();
+  }, []);
+
+  const forceSuccess = useCallback((name: string, checkInTime: string) => {
+    setStudentResult({ name, checkInTime });
+    setErrorMessage(null);
+    setAppState('SUCCESS');
+    playSuccessChime();
+  }, []);
+
+  const forceError = useCallback((message: string) => {
+    setStudentResult(null);
+    setErrorMessage(message);
+    setAppState('ERROR');
+    playErrorChime();
   }, []);
 
   return {
-    // State
     appState,
     studentResult,
     errorMessage,
     subject,
-    // Actions
     startScan,
     submitFrame,
     tryAgain,
     cancel,
     done,
     handleCameraError,
+    forceSuccess,
+    forceError,
   };
 }

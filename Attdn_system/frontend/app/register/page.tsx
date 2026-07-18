@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Webcam from 'react-webcam';
 import WebcamCapture from '../components/WebcamCapture';
-import { detectFaceFrame, cropToCircle } from '../lib/faceDetection';
+import { detectFaceFrame } from '../lib/faceDetection';
 import { registerStudent } from '../lib/apiClient';
 type RegisterStep = 'INPUT' | 'SCAN' | 'PROCESSING' | 'SUCCESS' | 'ERROR';
 export default function RegisterPage(): React.JSX.Element {
@@ -46,8 +46,7 @@ export default function RegisterPage(): React.JSX.Element {
     }
     setStep('PROCESSING');
     try {
-      const croppedBase64 = await cropToCircle(base64);
-      const res = await registerStudent({ name, image_data: croppedBase64 });
+      const res = await registerStudent(name, base64);
       if (res.status === 'success') {
         setStep('SUCCESS');
       } else {
@@ -128,6 +127,28 @@ export default function RegisterPage(): React.JSX.Element {
                 transform: 'translate(-50%, -50%)',
               }}
             />
+            <svg
+              className={`absolute pointer-events-none z-20 transition-all duration-300 ${
+                faceDetected 
+                  ? 'text-emerald-500/70 scale-100' 
+                  : 'text-slate-400/40 scale-[0.97] animate-pulse'
+              }`}
+              style={{
+                width: '160px',
+                height: '210px',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+              viewBox="0 0 160 210"
+            >
+              <circle cx="50" cy="80" r="6" stroke="currentColor" strokeWidth="1.5" fill="none" />
+              <circle cx="50" cy="80" r="1" fill="currentColor" />
+              <circle cx="110" cy="80" r="6" stroke="currentColor" strokeWidth="1.5" fill="none" />
+              <circle cx="110" cy="80" r="1" fill="currentColor" />
+              <path d="M80,85 L80,125 M75,125 L85,125" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              <path d="M60,158 Q80,168 100,158" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+            </svg>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 w-full">
             <button

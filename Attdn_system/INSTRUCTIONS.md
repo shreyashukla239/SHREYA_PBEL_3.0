@@ -42,11 +42,15 @@ This document explains how to set up the environment and run both the backend an
 
 The backend server will run on: **http://localhost:5000**
 
+> [!NOTE]
+> **Virtual Environment Paths**: If the project directory is moved (e.g. from `older` to `__\New folder`), the absolute paths cached inside the Python virtual environment (.venv) will break, causing launch errors.
+> If this happens, delete the `.venv` folder, then run `python -m venv .venv` inside the backend directory to recreate it.
+
 ---
 
 ## 🌐 Frontend Server Setup (Next.js)
 
-1. Open a new terminal and navigate to the frontend folder:
+1. Open a new terminal and naviga 5000te to the frontend folder:
    ```bash
    cd frontend
    ```

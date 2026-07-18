@@ -20,6 +20,8 @@ export interface FSMActions {
   cancel: () => void;
   done: () => void;
   handleCameraError: (message: string) => void;
+  forceSuccess: (name: string, checkInTime: string) => void;
+  forceError: (message: string) => void;
 }
 export interface VerifyAttendanceRequest {
   image_data: string;

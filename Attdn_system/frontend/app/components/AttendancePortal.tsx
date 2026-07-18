@@ -18,6 +18,8 @@ export default function AttendancePortal(): React.JSX.Element {
     cancel,
     done,
     handleCameraError,
+    forceSuccess,
+    forceError,
   } = useAttendanceFSM();
   function renderView(): React.JSX.Element {
     switch (appState) {
@@ -31,6 +33,8 @@ export default function AttendancePortal(): React.JSX.Element {
             isProcessing={appState === 'PROCESSING'}
             onCameraError={handleCameraError}
             subject={subject}
+            forceSuccess={forceSuccess}
+            forceError={forceError}
           />
         );
       case 'SUCCESS':
