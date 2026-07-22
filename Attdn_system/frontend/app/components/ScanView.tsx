@@ -136,7 +136,6 @@ export default function ScanView({
     if (wsStatus === 'Offline' || wsStatus === 'Disconnected') return '🔴';
     return '🔵';
   })();
-
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 text-slate-900">
       <div className="bg-white border border-slate-200 rounded-2xl p-6 max-w-lg w-full mx-4 flex flex-col items-center gap-5 shadow-sm">
@@ -196,7 +195,6 @@ export default function ScanView({
           </svg>
           <div style={{ position: 'absolute', display: 'none' }} />
         </div>
-
         <div className="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 flex items-center gap-3">
           <span className="text-2xl">{statusIcon}</span>
           <div className="flex-1">
@@ -210,7 +208,6 @@ export default function ScanView({
             </span>
           )}
         </div>
-
         <button
           type="button"
           onClick={handleCapture}
